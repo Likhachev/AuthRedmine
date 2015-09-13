@@ -8,8 +8,8 @@ if(!defined( 'MEDIAWIKI' ))
 $wgExtensionCredits['other'][] = array(
     'name' => 'AuthRedmine',
     'author' => 'Konstantin Likhachev (k.likhachev@gmail.com)',
-    'url' => '',
-    'description' => 'Allows MediaWiki to authenticate user using Redmine users table.'
+    'url' => 'https://github.com/Likhachev/AuthRedmine',
+    'description' => 'Allows MediaWiki to authenticate users via Redmine.'
 );
 
 
@@ -35,7 +35,6 @@ class AuthRedmine extends AuthPlugin
         // Tables
         $userTable = 'users',
         $userGroupsTable = 'groups_users',
-        //$userEmailsTable = 'email_addresses',
 
         // Login columns
         $usernameCol = 'login',
