@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>AuthRedmine by Likhachev</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">AuthRedmine</h1>
+      <h2 class="project-tagline">MediaWiki plugin for authorization via Redmine</h2>
+      <a href="https://github.com/Likhachev/AuthRedmine" class="btn">View on GitHub</a>
+      <a href="https://github.com/Likhachev/AuthRedmine/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Likhachev/AuthRedmine/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p>AuthRedmine extension allows MediaWiki and Redmine to share authentication info. Redmine does all the work in this case, with all user creation and management being done there. Mediawiki's account creation is disabled and all authentication checks go to the Redmine database.</p>
+
+<p>Plugin inspired by <a href="https://www.mediawiki.org/wiki/Extension:AuthSymfony">AuthSymfony</a></p>
+
+<p>Tested with version <em>1.25</em></p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<ol>
+<li>Clone repository into <em>extensions</em> folder</li>
+<li>Check plugin settings</li>
+</ol>
+
+<h2>
+<a id="settings" class="anchor" href="#settings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Settings</h2>
+
+<p>Place these settings in <em>LocalSettings.php</em></p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_useExtDb</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;                <span class="pl-c">// if true, fill out db info below</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_host</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>localhost<span class="pl-pds">'</span></span>;             <span class="pl-c">// redmine database host</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_username</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>redmine<span class="pl-pds">'</span></span>;           <span class="pl-c">// redmine database user login</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_password</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span>;  <span class="pl-c">// ... password</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_database</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>redmine<span class="pl-pds">'</span></span>;     <span class="pl-c">// and name</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_login_groups</span> <span class="pl-k">=</span> <span class="pl-c1">array</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>);  <span class="pl-c">// groups required to allow logins. leave blank if everyone can log in</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgAuthRedmine_editor_groups</span><span class="pl-k">=</span> <span class="pl-c1">array</span>(<span class="pl-c1">10</span>);  <span class="pl-c">// groups required to allow editing. leave blank if everyone can edit</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">array</span>();      <span class="pl-c">// no rights for anonymous users</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>][<span class="pl-s"><span class="pl-pds">'</span>read<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">true</span>; <span class="pl-c">// except viewing</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>editor<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>]; <span class="pl-c">// this lets us control who's a "normal user"</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">array</span>();                       <span class="pl-c">// logged-in users have no rights by default</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>editor<span class="pl-pds">'</span></span>][<span class="pl-s"><span class="pl-pds">'</span>createaccount<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">false</span>;      <span class="pl-c">// no one can make an account on their own</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>bureaucrat<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">array</span>(); <span class="pl-c">// not using this one, as Symfony does rights management</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>sysop<span class="pl-pds">'</span></span>][<span class="pl-s"><span class="pl-pds">'</span>createaccount<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">false</span>; <span class="pl-c">// No one makes accounts!</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// If we don't want anonymous users to be able to use the site, do this:</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgGroupPermissions</span>[<span class="pl-s"><span class="pl-pds">'</span>*<span class="pl-pds">'</span></span>][<span class="pl-s"><span class="pl-pds">'</span>read<span class="pl-pds">'</span></span>] <span class="pl-k">=</span> <span class="pl-c1">false</span>; <span class="pl-c">// Disable viewing by anonymous users</span></span>
+<span class="pl-s1"><span class="pl-smi">$wgWhitelistRead</span> <span class="pl-k">=</span>  <span class="pl-k">array</span> (<span class="pl-s"><span class="pl-pds">"</span>Special:Userlogin<span class="pl-pds">"</span></span><span class="pl-c">/*, "Main Page", "Help:Contents"*/</span>); <span class="pl-c">// but let them log in</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">require_once</span>(<span class="pl-s"><span class="pl-pds">"</span><span class="pl-smi">$IP</span>/extensions/AuthRedmine/AuthRedmine.php<span class="pl-pds">"</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$wgAuth</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">AuthRedmine</span>();</span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Likhachev/AuthRedmine">AuthRedmine</a> is maintained by <a href="https://github.com/Likhachev">Likhachev</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
